@@ -1,0 +1,26 @@
+#sir-chat-toggle:hover {
+    background: #333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+#sir-chat-toggle:active {
+    transform: translateY(0);
+}
+
+#sir-chat-modal {
+    font-family: Arial, sans-serif;
+}
+
+@media (max-width: 768px) {
+    #sir-chat-modal {
+        width: 100%;
+    }
+    
+    #sir-chat-toggle {
+        bottom: 10px;
+        right: 10px;
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+} 
