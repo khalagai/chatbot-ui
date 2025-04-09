@@ -10,15 +10,35 @@ export async function middleware(req: NextRequest) {
     data: { session }
   } = await supabase.auth.getSession()
 
-  // If user is not signed in and the current path is not /login,
-  // redirect the user to /login
-  if (!session && req.nextUrl.pathname !== '/login') {
-    return NextResponse.redirect(new URL('/login', req.url))
+  const path = req.nextUrl.pathname
+
+  // Allow access to public paths without authentication
+  const publicPaths = ['/login', '/signup', '/reset-password']
+  if (publicPaths.includes(path)) {
+    if (session) {
+      // If user is already logged in, redirect to chat
+      return NextResponse.redirect(new URL('/chat', req.url))
+    }
+    return res
   }
 
-  // If user is signed in and the current path is /login,
-  // redirect the user to /chat
-  if (session && req.nextUrl.pathname === '/login') {
+  // Handle root path
+  if (path === '/') {
+    if (!session) {
+      return NextResponse.redirect(new URL('/login', req.url))
+    }
+    return NextResponse.redirect(new URL('/chat', req.url))
+  }
+
+  // Protect all other routes
+  if (!session) {
+    const redirectUrl = new URL('/login', req.url)
+    redirectUrl.searchParams.set('redirectTo', path)
+    return NextResponse.redirect(redirectUrl)
+  }
+
+  // If user is on /chat without a workspace ID, try to get their home workspace
+  if (path === '/chat') {
     try {
       const { data: workspace } = await supabase
         .from('workspaces')
@@ -32,8 +52,6 @@ export async function middleware(req: NextRequest) {
       }
     } catch (error) {
       console.error('Error fetching workspace:', error)
-      // If there's an error, redirect to /chat without a specific workspace
-      return NextResponse.redirect(new URL('/chat', req.url))
     }
   }
 
