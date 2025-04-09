@@ -1,46 +1,45 @@
-import { createClient } from "@/lib/supabase/middleware"
-import { i18nRouter } from "next-i18n-router"
-import { NextResponse, type NextRequest } from "next/server"
-import i18nConfig from "./i18nConfig"
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
-export async function middleware(request: NextRequest) {
-  const i18nResult = i18nRouter(request, i18nConfig)
-  if (i18nResult) return i18nResult
+export async function middleware(req: NextRequest) {
+  const res = NextResponse.next()
+  const supabase = createMiddlewareClient({ req, res })
 
-  try {
-    const { supabase, response } = createClient(request)
+  const {
+    data: { session }
+  } = await supabase.auth.getSession()
 
-    const session = await supabase.auth.getSession()
+  // If user is not signed in and the current path is not /login,
+  // redirect the user to /login
+  if (!session && req.nextUrl.pathname !== '/login') {
+    return NextResponse.redirect(new URL('/login', req.url))
+  }
 
-    const redirectToChat = session && request.nextUrl.pathname === "/"
-
-    if (redirectToChat) {
-      const { data: homeWorkspace, error } = await supabase
-        .from("workspaces")
-        .select("*")
-        .eq("user_id", session.data.session?.user.id)
-        .eq("is_home", true)
+  // If user is signed in and the current path is /login,
+  // redirect the user to /chat
+  if (session && req.nextUrl.pathname === '/login') {
+    try {
+      const { data: workspace } = await supabase
+        .from('workspaces')
+        .select('id')
+        .eq('user_id', session.user.id)
+        .eq('is_home', true)
         .single()
 
-      if (!homeWorkspace) {
-        throw new Error(error?.message)
+      if (workspace) {
+        return NextResponse.redirect(new URL(`/chat/${workspace.id}`, req.url))
       }
-
-      return NextResponse.redirect(
-        new URL(`/${homeWorkspace.id}/chat`, request.url)
-      )
+    } catch (error) {
+      console.error('Error fetching workspace:', error)
+      // If there's an error, redirect to /chat without a specific workspace
+      return NextResponse.redirect(new URL('/chat', req.url))
     }
-
-    return response
-  } catch (e) {
-    return NextResponse.next({
-      request: {
-        headers: request.headers
-      }
-    })
   }
+
+  return res
 }
 
 export const config = {
-  matcher: "/((?!api|static|.*\\..*|_next|auth).*)"
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)']
 }
