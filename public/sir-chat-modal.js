@@ -19,7 +19,7 @@
 
     // Create iframe
     const iframe = document.createElement('iframe');
-    iframe.src = 'https://chatbot-d2zr25yov-khalagais-projects.vercel.app/';
+    iframe.src = 'https://chatbot-ui-pi-one.vercel.app/';
     iframe.style.cssText = `
         width: 100%;
         height: 100%;
