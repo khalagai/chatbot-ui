@@ -167,115 +167,85 @@ export const ChatInput: FC<ChatInputProps> = ({}) => {
       <div className="flex flex-col flex-wrap justify-center gap-2">
         <ChatFilesDisplay />
 
-        {selectedTools &&
-          selectedTools.map((tool, index) => (
-            <div
-              key={index}
-              className="flex justify-center"
-              onClick={() =>
-                setSelectedTools(
-                  selectedTools.filter(
-                    selectedTool => selectedTool.id !== tool.id
-                  )
-                )
-              }
-            >
-              <div className="flex cursor-pointer items-center justify-center space-x-1 rounded-lg bg-purple-600 px-3 py-1 hover:opacity-50">
-                <IconBolt size={20} />
+        <div className="relative flex w-full items-end gap-3 bg-zinc-950 px-4">
+          <div className="relative flex-1">
+            <TextareaAutosize
+              textareaRef={chatInputRef}
+              placeholder="Type your message..."
+              className="chat-input"
+              maxRows={5}
+              value={userInput}
+              onValueChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              onPaste={handlePaste}
+              onCompositionStart={() => setIsTyping(true)}
+              onCompositionEnd={() => setIsTyping(false)}
+            />
+          </div>
 
-                <div>{tool.name}</div>
-              </div>
-            </div>
-          ))}
-
-        {selectedAssistant && (
-          <div className="border-primary mx-auto flex w-fit items-center space-x-2 rounded-lg border p-1.5">
-            {selectedAssistant.image_path && (
-              <Image
-                className="rounded"
-                src={
-                  assistantImages.find(
-                    img => img.path === selectedAssistant.image_path
-                  )?.base64
-                }
-                width={28}
-                height={28}
-                alt={selectedAssistant.name}
+          <button
+            className="chat-send-button"
+            onClick={() => handleSendMessage(userInput, chatMessages, false)}
+            disabled={!userInput.trim() || isGenerating}
+          >
+            {isGenerating ? (
+              <IconPlayerStopFilled
+                className="animate-pulse"
+                size={20}
+                onClick={e => {
+                  e.preventDefault()
+                  handleStopMessage()
+                }}
               />
+            ) : (
+              <IconSend size={20} />
             )}
+          </button>
+        </div>
+      </div>
 
-            <div className="text-sm font-bold">
-              Talking to {selectedAssistant.name}
+      {selectedTools &&
+        selectedTools.map((tool, index) => (
+          <div
+            key={index}
+            className="flex justify-center"
+            onClick={() =>
+              setSelectedTools(
+                selectedTools.filter(
+                  selectedTool => selectedTool.id !== tool.id
+                )
+              )
+            }
+          >
+            <div className="flex cursor-pointer items-center justify-center space-x-1 rounded-lg bg-blue-600 px-3 py-1 transition-colors hover:bg-blue-500 hover:opacity-90">
+              <IconBolt size={20} />
+
+              <div>{tool.name}</div>
             </div>
           </div>
-        )}
-      </div>
+        ))}
 
-      <div className="border-input relative mt-3 flex min-h-[60px] w-full items-center justify-center rounded-xl border-2">
-        <div className="absolute bottom-[76px] left-0 max-h-[300px] w-full overflow-auto rounded-xl dark:border-none">
-          <ChatCommandInput />
-        </div>
-
-        <>
-          <IconCirclePlus
-            className="absolute bottom-[12px] left-3 cursor-pointer p-1 hover:opacity-50"
-            size={32}
-            onClick={() => fileInputRef.current?.click()}
-          />
-
-          {/* Hidden input to select files from device */}
-          <Input
-            ref={fileInputRef}
-            className="hidden"
-            type="file"
-            onChange={e => {
-              if (!e.target.files) return
-              handleSelectDeviceFile(e.target.files[0])
-            }}
-            accept={filesToAccept}
-          />
-        </>
-
-        <TextareaAutosize
-          textareaRef={chatInputRef}
-          className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring text-md flex w-full resize-none rounded-md border-none bg-transparent px-14 py-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-          placeholder={t(
-            // `Ask anything. Type "@" for assistants, "/" for prompts, "#" for files, and "!" for tools.`
-            `Ask anything. Type @  /  #  !`
-          )}
-          onValueChange={handleInputChange}
-          value={userInput}
-          minRows={1}
-          maxRows={18}
-          onKeyDown={handleKeyDown}
-          onPaste={handlePaste}
-          onCompositionStart={() => setIsTyping(true)}
-          onCompositionEnd={() => setIsTyping(false)}
-        />
-
-        <div className="absolute bottom-[14px] right-3 cursor-pointer hover:opacity-50">
-          {isGenerating ? (
-            <IconPlayerStopFilled
-              className="hover:bg-background animate-pulse rounded bg-transparent p-1"
-              onClick={handleStopMessage}
-              size={30}
-            />
-          ) : (
-            <IconSend
-              className={cn(
-                "bg-primary text-secondary rounded p-1",
-                !userInput && "cursor-not-allowed opacity-50"
-              )}
-              onClick={() => {
-                if (!userInput) return
-
-                handleSendMessage(userInput, chatMessages, false)
-              }}
-              size={30}
+      {selectedAssistant && (
+        <div className="border-primary mx-auto flex w-fit items-center space-x-2 rounded-lg border p-1.5">
+          {selectedAssistant.image_path && (
+            <Image
+              className="rounded"
+              src={
+                assistantImages.find(
+                  img => img.path === selectedAssistant.image_path
+                )?.base64
+              }
+              width={28}
+              height={28}
+              alt={selectedAssistant.name}
             />
           )}
+
+          <div className="text-sm font-bold">
+            Talking to {selectedAssistant.name}
+          </div>
         </div>
-      </div>
+      )}
     </>
   )
 }

@@ -1,0 +1,55 @@
+.messageWrapper {
+  @apply flex w-full items-start gap-4 px-4 relative;
+  margin: 1rem 0;
+}
+
+.messageWrapperUser {
+  @apply justify-end;
+}
+
+.messageWrapperAssistant {
+  @apply justify-start;
+}
+
+.message {
+  @apply relative max-w-[80%] rounded-lg p-4 text-sm;
+  margin: 0.5rem 0;
+}
+
+.messageAssistant {
+  @apply bg-zinc-800 text-white;
+  border: 1px solid rgb(63 63 70);
+}
+
+.messageUser {
+  @apply bg-blue-600 text-white;
+}
+
+.avatar {
+  @apply flex h-8 w-8 items-center justify-center rounded-full flex-shrink-0;
+}
+
+.avatarAssistant {
+  @apply bg-zinc-800;
+  border: 1px solid rgb(63 63 70);
+}
+
+.avatarUser {
+  @apply bg-blue-600;
+}
+
+.messageContent {
+  @apply whitespace-pre-wrap;
+}
+
+.timestamp {
+  @apply text-xs text-zinc-400 absolute bottom-1 right-2;
+}
+
+.actions {
+  @apply absolute right-2 top-2;
+}
+
+.editButtons {
+  @apply mt-4 flex justify-end space-x-2;
+} 

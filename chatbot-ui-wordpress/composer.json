@@ -1,0 +1,1 @@
+{"name":"sir-chatbot/chatbot-ui-wordpress","description":"WordPress plugin for Chatbot UI integration","type":"wordpress-plugin","license":"GPL-2.0-or-later","require":{"php":">=7.4","composer/installers":"^2.0","supabase/supabase-php":"^0.1.0"},"autoload":{"psr-4":{"ChatbotUI\\":"includes/"}},"config":{"allow-plugins":{"composer/installers":true}}}

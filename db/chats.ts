@@ -11,6 +11,30 @@ export const getChatById = async (chatId: string) => {
   return chat
 }
 
+export const getUserChats = async (userId: string) => {
+  const { data: chats, error } = await supabase
+    .from("chats")
+    .select(
+      `
+      *,
+      messages (
+        id,
+        content,
+        role,
+        created_at
+      )
+    `
+    )
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+
+  if (error) {
+    throw new Error(error.message)
+  }
+
+  return chats
+}
+
 export const getChatsByWorkspaceId = async (workspaceId: string) => {
   const { data: chats, error } = await supabase
     .from("chats")
