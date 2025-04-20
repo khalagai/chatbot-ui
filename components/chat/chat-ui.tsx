@@ -1,6 +1,5 @@
 import Loading from "@/app/[locale]/loading"
 import { useChatHandler } from "@/components/chat/chat-hooks/use-chat-handler"
-import { ChatHistory } from "@/components/chat/chat-history"
 import { ChatbotUIContext } from "@/context/context"
 import { getAssistantToolsByAssistantId } from "@/db/assistant-tools"
 import { getChatFilesByChatId } from "@/db/chat-files"
@@ -187,41 +186,31 @@ export const ChatUI: FC<ChatUIProps> = ({}) => {
   }
 
   return (
-    <div className="flex h-full">
-      <ChatHistory />
-
-      <div
-        id="chatbot-ui-root"
-        className="flex h-full flex-1 flex-col bg-zinc-950"
-      >
-        <div className="flex-1 overflow-hidden">
-          <div className="relative h-full">
-            <div className="absolute inset-0">
-              <div
-                ref={messagesStartRef}
-                className="h-full overflow-y-auto py-4"
-              >
-                <ChatMessages />
-              </div>
+    <div id="chatbot-ui-root" className="flex h-full flex-col bg-zinc-950">
+      <div className="flex-1 overflow-hidden">
+        <div className="relative h-full">
+          <div className="absolute inset-0">
+            <div ref={messagesStartRef} className="h-full overflow-y-auto py-4">
+              <ChatMessages />
             </div>
           </div>
         </div>
-
-        <div className="border-t border-zinc-800 bg-zinc-950 p-4">
-          <div className="mx-auto max-w-3xl">
-            <ChatInput />
-          </div>
-        </div>
-
-        <ChatScrollButtons
-          isAtTop={isAtTop}
-          isAtBottom={isAtBottom}
-          isOverflowing={isOverflowing}
-          scrollToTop={scrollToTop}
-          scrollToBottom={scrollToBottom}
-        />
-        <ChatSecondaryButtons />
       </div>
+
+      <div className="border-t border-zinc-800 bg-zinc-950 p-4">
+        <div className="mx-auto max-w-3xl">
+          <ChatInput />
+        </div>
+      </div>
+
+      <ChatScrollButtons
+        isAtTop={isAtTop}
+        isAtBottom={isAtBottom}
+        isOverflowing={isOverflowing}
+        scrollToTop={scrollToTop}
+        scrollToBottom={scrollToBottom}
+      />
+      <ChatSecondaryButtons />
     </div>
   )
 }
