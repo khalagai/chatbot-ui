@@ -127,7 +127,7 @@ export async function middleware(req: NextRequest) {
   return res
 }
 
-// Configure the middleware to run on all routes except static files and API routes
+// Configure the middleware to run on all routes except static files, API routes, and manifest.json
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)']
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|manifest.json).*)']
 }
