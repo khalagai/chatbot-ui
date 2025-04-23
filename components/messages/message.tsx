@@ -26,8 +26,8 @@ import { WithTooltip } from "../ui/with-tooltip"
 import { MessageActions } from "./message-actions"
 import { MessageMarkdown } from "./message-markdown"
 import styles from "./message.module.css"
-import type { CSSProperties } from "react"
-import { StyleDebug } from "./style-debug"
+import type { CSSProperties } from 'react';
+import { StyleDebug } from './style-debug';
 
 const ICON_SIZE = 32
 
@@ -186,64 +186,62 @@ export const Message: FC<MessageProps> = ({
 
   const inlineStyles: Record<string, CSSProperties> = {
     wrapper: {
-      display: "flex",
-      width: "100%",
-      alignItems: "flex-start",
-      gap: "1rem",
-      padding: "0 1rem",
-      position: "relative",
-      margin: "1rem 0"
+      display: 'flex',
+      width: '100%',
+      alignItems: 'flex-start',
+      gap: '1rem',
+      padding: '0 1rem',
+      position: 'relative',
+      margin: '1rem 0'
     },
     wrapperUser: {
-      justifyContent: "flex-end"
+      justifyContent: 'flex-end'
     },
     wrapperAssistant: {
-      justifyContent: "flex-start"
+      justifyContent: 'flex-start'
     },
     message: {
-      position: "relative",
-      maxWidth: "80%",
-      borderRadius: "0.5rem",
-      padding: "1rem",
-      fontSize: "0.875rem",
-      margin: "0.5rem 0"
+      position: 'relative',
+      maxWidth: '80%',
+      borderRadius: '0.5rem',
+      padding: '1rem',
+      fontSize: '0.875rem',
+      margin: '0.5rem 0'
     },
     messageAssistant: {
-      backgroundColor: "rgb(39 39 42)",
-      color: "white",
-      border: "1px solid rgb(63 63 70)"
+      backgroundColor: 'rgb(39 39 42)',
+      color: 'white',
+      border: '1px solid rgb(63 63 70)'
     },
     messageUser: {
-      backgroundColor: "rgb(37 99 235)",
-      color: "white"
+      backgroundColor: 'rgb(37 99 235)',
+      color: 'white'
     },
     avatar: {
-      display: "flex",
-      width: "2rem",
-      height: "2rem",
-      alignItems: "center",
-      justifyContent: "center",
-      borderRadius: "9999px",
+      display: 'flex',
+      width: '2rem',
+      height: '2rem',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: '9999px',
       flexShrink: 0
     },
     avatarAssistant: {
-      backgroundColor: "rgb(39 39 42)",
-      border: "1px solid rgb(63 63 70)"
+      backgroundColor: 'rgb(39 39 42)',
+      border: '1px solid rgb(63 63 70)'
     },
     avatarUser: {
-      backgroundColor: "rgb(37 99 235)"
+      backgroundColor: 'rgb(37 99 235)'
     }
-  }
+  };
 
   // Debug styles
   useEffect(() => {
     // Log computed styles for debugging
-    const messageElement = document.querySelector(
-      `[data-message-id="${message.id}"]`
-    )
+    const messageElement = document.querySelector(`[data-message-id="${message.id}"]`);
     if (messageElement) {
-      const computedStyle = window.getComputedStyle(messageElement)
-      console.log("Message computed styles:", {
+      const computedStyle = window.getComputedStyle(messageElement);
+      console.log('Message computed styles:', {
         id: message.id,
         role: message.role,
         backgroundColor: computedStyle.backgroundColor,
@@ -252,31 +250,29 @@ export const Message: FC<MessageProps> = ({
         margin: computedStyle.margin,
         borderRadius: computedStyle.borderRadius,
         maxWidth: computedStyle.maxWidth
-      })
+      });
     }
-  }, [message.id, message.role])
+  }, [message.id, message.role]);
 
   const messageClasses = cn(
     "chat-message",
-    message.role === "assistant"
-      ? "chat-message-assistant"
-      : "chat-message-user"
-  )
+    message.role === "assistant" ? "chat-message-assistant" : "chat-message-user"
+  );
 
   const avatarClasses = cn(
     "chat-avatar",
     message.role === "assistant" ? "chat-avatar-assistant" : "chat-avatar-user"
-  )
+  );
 
   // Log class application
   useEffect(() => {
-    console.log("Applied classes:", {
+    console.log('Applied classes:', {
       id: message.id,
       role: message.role,
       messageClasses,
       avatarClasses
-    })
-  }, [message.id, message.role, messageClasses, avatarClasses])
+    });
+  }, [message.id, message.role, messageClasses, avatarClasses]);
 
   return (
     <>
@@ -291,7 +287,7 @@ export const Message: FC<MessageProps> = ({
         onKeyDown={handleKeyDown}
       >
         {message.role === "assistant" && (
-          <div
+          <div 
             className={avatarClasses}
             data-component="avatar"
             data-role={message.role}
@@ -310,12 +306,15 @@ export const Message: FC<MessageProps> = ({
           </div>
         )}
 
-        <div
+        <div 
           className={messageClasses}
           data-component="message"
           data-role={message.role}
         >
-          <div className="whitespace-pre-wrap" data-component="message-content">
+          <div 
+            className="whitespace-pre-wrap"
+            data-component="message-content"
+          >
             {isEditing ? (
               <TextareaAutosize
                 textareaRef={editInputRef}
@@ -328,7 +327,7 @@ export const Message: FC<MessageProps> = ({
               <MessageMarkdown content={message.content} />
             )}
           </div>
-          <div
+          <div 
             className="absolute bottom-1 right-2 text-xs text-zinc-400"
             data-component="timestamp"
           >
@@ -337,7 +336,7 @@ export const Message: FC<MessageProps> = ({
         </div>
 
         {message.role === "user" && (
-          <div
+          <div 
             className={avatarClasses}
             data-component="avatar"
             data-role={message.role}
@@ -357,7 +356,10 @@ export const Message: FC<MessageProps> = ({
         )}
 
         {isHovering && !isEditing && (
-          <div className="absolute right-2 top-2" data-component="actions">
+          <div 
+            className="absolute right-2 top-2"
+            data-component="actions"
+          >
             <MessageActions
               onCopy={handleCopy}
               onEdit={handleStartEdit}
@@ -371,19 +373,23 @@ export const Message: FC<MessageProps> = ({
         )}
 
         {isEditing && (
-          <div
+          <div 
             className="mt-4 flex justify-end space-x-2"
             data-component="edit-buttons"
           >
-            <Button
-              size="sm"
+            <Button 
+              size="sm" 
               className="bg-blue-600 text-white hover:bg-blue-500"
               onClick={handleSendEdit}
             >
               Save & Send
             </Button>
 
-            <Button size="sm" variant="outline" onClick={onCancelEdit}>
+            <Button 
+              size="sm" 
+              variant="outline" 
+              onClick={onCancelEdit}
+            >
               Cancel
             </Button>
           </div>

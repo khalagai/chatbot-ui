@@ -186,11 +186,17 @@ export const ChatUI: FC<ChatUIProps> = ({}) => {
   }
 
   return (
-    <div id="chatbot-ui-root" className="flex h-full flex-col bg-zinc-950">
+    <div 
+      id="chatbot-ui-root"
+      className="flex h-full flex-col bg-zinc-950"
+    >
       <div className="flex-1 overflow-hidden">
         <div className="relative h-full">
           <div className="absolute inset-0">
-            <div ref={messagesStartRef} className="h-full overflow-y-auto py-4">
+            <div 
+              ref={messagesStartRef}
+              className="h-full overflow-y-auto py-4"
+            >
               <ChatMessages />
             </div>
           </div>
@@ -203,7 +209,7 @@ export const ChatUI: FC<ChatUIProps> = ({}) => {
         </div>
       </div>
 
-      <ChatScrollButtons
+      <ChatScrollButtons 
         isAtTop={isAtTop}
         isAtBottom={isAtBottom}
         isOverflowing={isOverflowing}

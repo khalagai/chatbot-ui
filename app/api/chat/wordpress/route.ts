@@ -20,9 +20,8 @@ export async function POST(request: Request) {
 
     if (!openaiApiKey) {
       return new Response(
-        JSON.stringify({
-          message:
-            "OpenAI API Key not found. Please set it in your WordPress settings or environment variables."
+        JSON.stringify({ 
+          message: "OpenAI API Key not found. Please set it in your WordPress settings or environment variables." 
         }),
         { status: 400 }
       )
@@ -47,13 +46,13 @@ export async function POST(request: Request) {
 
     // Return a simple response for WordPress
     return new Response(
-      JSON.stringify({
-        response: response.choices[0].message.content
+      JSON.stringify({ 
+        response: response.choices[0].message.content 
       }),
-      {
+      { 
         status: 200,
         headers: {
-          "Content-Type": "application/json"
+          'Content-Type': 'application/json'
         }
       }
     )
@@ -69,11 +68,14 @@ export async function POST(request: Request) {
         "OpenAI API Key is incorrect. Please fix it in your WordPress settings."
     }
 
-    return new Response(JSON.stringify({ message: errorMessage }), {
-      status: errorCode,
-      headers: {
-        "Content-Type": "application/json"
+    return new Response(
+      JSON.stringify({ message: errorMessage }),
+      { 
+        status: errorCode,
+        headers: {
+          'Content-Type': 'application/json'
+        }
       }
-    })
+    )
   }
-}
+} 

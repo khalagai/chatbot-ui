@@ -16,4 +16,4 @@ export const TypingIndicator: FC<TypingIndicatorProps> = () => {
       ))}
     </div>
   )
-}
+} 
